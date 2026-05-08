@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './Signup.module.css';
 import { useNavigate } from 'react-router-dom';
+import { isIdExist } from '../../api/membersApi';
 
 const Signup = () => {
   //기본 회원가입 데이터를 저장할 상태변수
@@ -38,8 +39,7 @@ const Signup = () => {
       //지금 입력칸 : 만약 pwCheck 입력중이면 지금 값 입력
                   // 만약 pw 입력중이면 formdate.pwCheck임
       const currentField = name === 'pwCheck' ? value : formData.pwCheck;
-      //currentField (지금 칸): 사용자가 지금 타이핑 중인 pw의 값입니다. 즉, value입니다.
-      // otherField (반대쪽 칸): 이미 입력되어 저장되어 있는 pwCheck의 값입니다. 즉, formData.pwCheck입니다.
+      
       if (currentField && otherField !== currentField) {
         setPwError('Passwords do not match');
       } else {
@@ -60,26 +60,38 @@ const Signup = () => {
 //id 중복체크
   const handleIdCheck = () => {
     if (!formData.id) {
-      alert('Please enter an ID');
+      alert('ID를 입력해주세요.');
       return;
     }
-    console.log('Checking ID duplication:', formData.id);
-    // 중복 체크 로직
-    setIsIdChecked(true);
-    alert('사용 가능한 ID입니다!');
+    
+    isIdExist(formData.id).then(resp => {
+        console.log(resp.data);
+        if (resp.data === 1) {
+          alert("이미 존재하는 ID입니다.");
+          setIsIdChecked(false);
+        } else {
+          alert("사용 가능한 아이디입니다.");
+          setIsIdChecked(true); // <--- 중복이 아닐 때만 true로 변경!
+        }
+      })
+      .catch(err => {
+        console.error("error", err);
+        setIsIdChecked(false);
+      });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!isIdChecked) {
-      alert('Please check ID duplication first');
+      alert('아이디 중복 체크를 해주세요.');
       return;
     }
     if (formData.pw !== formData.pwCheck) {
-      setPwError('Please check your password again');
+      setPwError('비밀번호를 다시 확인해주세요.');
       return;
     }
     console.log('Signup data:', formData);
+    // 실제 회원가입 axios 코드가 여기에 들어갑니다.
   };
 
   return (
@@ -93,7 +105,7 @@ const Signup = () => {
               <input type="text" id="id" name="id" value={formData.id} onChange={handleChange} required />
               <button type="button" className={styles.smallButton} onClick={handleIdCheck}>중복확인</button>
             </div>
-            {isIdChecked && <p className={styles.successText}>ID가 확인되었습니다.</p>}
+            {isIdChecked && <p className={styles.successText}>사용 가능한 아이디입니다.</p>}
           </div>
 
           <div className={styles.row}>
