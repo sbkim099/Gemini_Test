@@ -1,11 +1,12 @@
 import React from 'react';
-import { ClockLoader } from 'react-spinners';
+import { FadeLoader } from 'react-spinners';
 import styles from './Loading.module.css';
 
 const Loading = () => {
   return (
     <div className={styles.container}>
-      <ClockLoader color="#36d7b7" size={100} />
+      <FadeLoader color="#75e3f1" size={80} />
+      <p className={styles.text}>데이터 로딩 중입니다..</p>
     </div>
   );
 };
