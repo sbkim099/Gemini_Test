@@ -13,9 +13,16 @@ import BoardDetail from './domains/Board/BoardDetail';
 
 // Loading
 import Loading from './domains/Loading/Loading';
+import useLoadingStore from './store/loadingStore';
 
 function App() {
+
+  const loading = useLoadingStore(state => state.loading);
+
   return (
+    <>
+      {loading && <Loading />}
+
       <Routes>
         {/* Members Routes */}
         <Route path="/" element={<Login />} />
@@ -26,11 +33,9 @@ function App() {
         <Route path="/board" element={<Board />} />
         <Route path="/board/write" element={<BoardWrite />} />
         <Route path="/board/:seq" element={<BoardDetail />} />
-        
-        {/* Loading / Error Fallback */}
-        <Route path="/loading" element={<Loading />} />
-        
+
       </Routes>
+    </>
   );
 }
 
