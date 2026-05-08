@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styles from './BoardDetail.module.css';
 import { getPostDetail } from '../../api/boardApi';
+import Reply from './Reply';
 
 const BoardDetail = () => {
   const { seq } = useParams();
@@ -59,6 +60,7 @@ const BoardDetail = () => {
           삭제하기
         </button>
       </div>
+      <Reply />
     </div>
   );
 };
