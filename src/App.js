@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 // Members
 import Login from './domains/Members/Login';
@@ -16,7 +16,6 @@ import Loading from './domains/Loading/Loading';
 
 function App() {
   return (
-    <Router>
       <Routes>
         {/* Members Routes */}
         <Route path="/" element={<Login />} />
@@ -32,7 +31,6 @@ function App() {
         <Route path="/loading" element={<Loading />} />
         
       </Routes>
-    </Router>
   );
 }
 
