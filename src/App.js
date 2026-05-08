@@ -14,6 +14,7 @@ import BoardDetail from './domains/Board/BoardDetail';
 // Loading
 import Loading from './domains/Loading/Loading';
 import useLoadingStore from './store/loadingStore';
+import Reply from './domains/Board/Reply';
 
 function App() {
 
@@ -33,7 +34,7 @@ function App() {
         <Route path="/board" element={<Board />} />
         <Route path="/board/write" element={<BoardWrite />} />
         <Route path="/board/:seq" element={<BoardDetail />} />
-
+        <Route path='/board/reply' element={<Reply />} />
       </Routes>
     </>
   );
