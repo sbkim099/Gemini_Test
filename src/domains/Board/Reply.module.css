@@ -1,5 +1,5 @@
 .replyContainer {
-  width: 750px;
+  width: 700px;
   margin: 20px auto 0;
   padding: 20px;
   border-top: 1px solid #0062ff;
@@ -55,37 +55,61 @@
 .replyItem {
   display: flex;
   justify-content: space-between;
-  align-items: center; /* 세로 중앙 정렬로 변경 */
-  min-height: 50px;    /* 최소 높이 설정 */
-  padding: 10px 15px;
+  align-items: stretch; /* 자식 요소들이 같은 높이를 갖도록 */
+  padding: 15px;
   background-color: #f0f7ff;
   border-radius: 8px;
   border-left: 5px solid #0062ff;
   box-sizing: border-box;
 }
 
-.content {
+.mainContent {
   flex: 1;
-  word-break: break-all;
-  margin-right: 15px;
   display: flex;
-  align-items: center; /* 텍스트 세로 중앙 정렬 */
-  line-height: 1.4;    /* 적절한 행간 유지 */
+  flex-direction: column;
+  justify-content: center;
+  margin-right: 15px;
+}
+
+.author {
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #0062ff;
+  margin-bottom: 5px;
+}
+
+.content {
+  word-break: break-all;
+  line-height: 1.4;
+  color: #333;
+}
+
+.sideContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  min-width: 120px;
+}
+
+.date {
+  font-size: 0.75rem;
+  color: #666;
+  margin-bottom: 8px;
 }
 
 .buttonGroup {
   display: flex;
-  gap: 8px;
-  align-items: center; /* 버튼들도 세로 중앙 정렬 */
+  gap: 5px;
 }
 
 .editBtn, .deleteBtn {
-  padding: 4px 10px;
+  padding: 3px 8px;
   border: 1px solid #0062ff;
   border-radius: 4px;
   background-color: white;
-  color: #333;
-  font-size: 13.6px;
+  color: #0062ff;
+  font-size: 0.75rem;
   cursor: pointer;
 }
 

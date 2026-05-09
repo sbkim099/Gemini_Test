@@ -3,26 +3,35 @@ import styles from './Reply.module.css';
 
 const Reply = () => {
   const [comment, setComment] = useState('');
-  // Mock data for display
-  const [reply, setReply] = useState([
-    { id: 1, content: '첫 번째 댓글입니다.' },
-    { id: 2, content: '두 번째 댓글입니다. UI가 깔끔하네요!' },
+  // Mock data for display including author and date
+  const [replies, setReplies] = useState([
+    { 
+      id: 1, 
+      author: '홍길동', 
+      content: '첫 번째 댓글입니다.', 
+      date: '2024-05-08 14:30' 
+    },
+    { 
+      id: 2, 
+      author: '김철수', 
+      content: '두 번째 댓글입니다. UI가 깔끔하네요!', 
+      date: '2024-05-08 15:45' 
+    },
   ]);
 
-  const [editTarget, setEditTarget] = useState(false);
-  const [update, setUpdate] = useState(null);
-
   const handleSubmit = () => {
-    if (comment === "" || comment === null) {
-      alert("댓글을 먼저 작성해 주세요.")
-      return;
-    }
+    if (!comment.trim()) return;
+    const now = new Date();
+    const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    
     const newReply = {
       id: Date.now(),
+      author: '현재 사용자', // 실제 구현시에는 로그인 유저 정보 사용
       content: comment,
+      date: formattedDate
     };
-    setReply([...reply, newReply]);
-    setComment("");
+    setReplies([...replies, newReply]);
+    setComment('');
   };
 
   return (
@@ -40,27 +49,19 @@ const Reply = () => {
       </div>
 
       <div className={styles.replyList}>
-        {reply.map((reply) => (
+        {replies.map((reply) => (
           <div key={reply.id} className={styles.replyItem}>
-
-            {
-              editTarget === true ? 
-                <>
-                  <input className={styles.content} placeholder="수정 내용을 입력해 주세요." />
-                  <div className={styles.buttonGroup}>
-                    <button className={styles.editBtn}>저장</button>
-                    <button onClick={() => { setEditTarget(false) }} className={styles.deleteBtn}>취소</button>
-                  </div>
-                </>
-              :
-                <>
-                  <div className={styles.content}>{reply.content}</div>
-                  <div className={styles.buttonGroup}>
-                    <button onClick={() => { setEditTarget(true); }} className={styles.editBtn} >수정</button>
-                    <button className={styles.deleteBtn}>삭제</button>
-                  </div>
-                </>
-            }
+            <div className={styles.mainContent}>
+              <div className={styles.author}>{reply.author}</div>
+              <div className={styles.content}>{reply.content}</div>
+            </div>
+            <div className={styles.sideContent}>
+              <div className={styles.date}>{reply.date}</div>
+              <div className={styles.buttonGroup}>
+                <button className={styles.editBtn}>수정</button>
+                <button className={styles.deleteBtn}>삭제</button>
+              </div>
+            </div>
           </div>
         ))}
       </div>
