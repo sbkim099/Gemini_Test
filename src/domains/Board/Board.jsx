@@ -3,10 +3,12 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import styles from './Board.module.css';
 import { getPostsList } from '../../api/boardApi';
 import { Pagination } from '@mui/material';
+import useLoadingStore from '../../store/loadingStore';
 
 const Board = () => {
   const navigate = useNavigate();
-
+  // 로딩바
+  const startEndLoading = useLoadingStore(state => state.startEndLoading);
   // 페이지 네비게이터 관련
 
   // url 뒤에 page 정보 붙일 때
@@ -17,6 +19,7 @@ const Board = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
+    startEndLoading()
     getPostsList(currentPage).then(resp => {
       setPosts(resp.data.list);
       setTotalPages(Math.ceil(resp.data.count / 10));
