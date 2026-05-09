@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Reply.module.css';
-import { getReplyByParentSeq, postReply } from '../../api/replyApi';
+import { deleteReply, getReplyByParentSeq, postReply, putReply } from '../../api/replyApi';
+import { nativeSelectClasses } from '@mui/material';
 
 const Reply = ({ seq }) => {
   const [reply, setReply] = useState([{
@@ -10,6 +11,8 @@ const Reply = ({ seq }) => {
     write_date: ""
   }]);
   const [comment, setComment] = useState("");
+  const [editTarget, setEditTarget] = useState(null);
+  const [editContents, setEditContents] = useState("");
 
 
   useEffect(() => {
@@ -24,7 +27,7 @@ const Reply = ({ seq }) => {
       alert("댓글을 먼저 작성해 주세요.");
       return;
     }
-    
+
     const newReply = {
       parent_seq: seq,
       writer: "김수빈",
@@ -38,6 +41,25 @@ const Reply = ({ seq }) => {
       setComment("");
     })
   };
+
+  const handleEdit = () => {
+    putReply(editTarget, editContents).then(() => {
+      getReplyByParentSeq(seq).then(resp => {
+        setReply(resp.data);
+      })
+      setEditTarget(null);
+    })
+  }
+
+  const handleDelete = (delSeq) => {
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      deleteReply(delSeq).then(() => {
+        getReplyByParentSeq(seq).then(resp => {
+          setReply(resp.data);
+        })
+      })
+    } return;
+  }
 
   return (
     <div className={styles.replyContainer}>
@@ -57,14 +79,39 @@ const Reply = ({ seq }) => {
           <div key={reply.seq} className={styles.replyItem}>
             <div className={styles.mainContent}>
               <div className={styles.author}>{reply.writer}</div>
-              <div className={styles.content}>{reply.contents}</div>
+              {
+                editTarget === reply.seq ?
+                  <>
+                    <textarea
+                      className={styles.textarea}
+                      placeholder="댓글을 입력해주세요..."
+                      value={editContents}
+                      onChange={(e) => setEditContents(e.target.value)} />
+
+                  </>
+                  :
+
+                  <div className={styles.content}>{reply.contents}</div>
+              }
             </div>
             <div className={styles.sideContent}>
               <div className={styles.date}>{reply.write_date.substring(0, 10)}</div>
-              <div className={styles.buttonGroup}>
-                <button className={styles.editBtn}>수정</button>
-                <button className={styles.deleteBtn}>삭제</button>
-              </div>
+
+              {
+                editTarget === reply.seq ?
+
+                  <div className={styles.buttonGroup}>
+                    <button className={styles.editBtn} onClick={handleEdit}>저장</button>
+                    <button className={styles.deleteBtn} onClick={() => { setEditTarget(null) }}>취소</button>
+                  </div>
+                  :
+                  <div className={styles.buttonGroup}>
+                    <button className={styles.editBtn} onClick={() => {
+                      setEditTarget(reply.seq); setEditContents(reply.contents);
+                    }}>수정</button>
+                    <button className={styles.deleteBtn} onClick={() => handleDelete(reply.seq)}>삭제</button>
+                  </div>
+              }
             </div>
           </div>
         ))}
