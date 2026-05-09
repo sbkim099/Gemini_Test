@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styles from './BoardDetail.module.css';
-import { getPostDetail, updatePost } from '../../api/boardApi';
+import { deletePost, getPostDetail, updatePost } from '../../api/boardApi';
 import Reply from './Reply';
 
 const BoardDetail = () => {
@@ -30,16 +30,25 @@ const BoardDetail = () => {
   }
 
   const handleEditBtn = () => {
-    updatePost(seq).then(resp => {
+    if (!editMsg.title.trim() || !editMsg.contents.trim()) {
+      alert('제목과 내용을 모두 입력해 주세요.');
+      return;
+    }
+    updatePost(seq, editMsg).then(resp => {
       setPost(prev => ({...prev, title: editMsg.title, contents: editMsg.contents}));
+      setEditState("");
     });
-    setEditState("");
   }
 
   const handleDelete= () => {
-
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      deletePost(seq).then(resp => {
+        alert("삭제되었습니다.");
+        navigate("/board");
+      })
+    }
   }
-  
+
   return (
     <div className={styles.container}>
       {
@@ -51,6 +60,8 @@ const BoardDetail = () => {
                 maxLength={100}
                 name='title'
                 onChange={handleEditChange}
+                value={editMsg.title}
+                className={styles.editInput}
               />
             </h1>
             <div className={styles.meta}>
@@ -65,13 +76,15 @@ const BoardDetail = () => {
               maxLength={1000}
               name='contents'
               onChange={handleEditChange}
+              value={editMsg.contents}
+              className={styles.editTextarea}
             />
           </div>
 
           <div className={styles.footer}>
             <button 
               className={styles.editBtn}
-              onClick={() => {handleEditBtn}}
+              onClick={handleEditBtn}
             >
               수정완료
             </button>
@@ -97,27 +110,40 @@ const BoardDetail = () => {
           <div className={styles.content}>
             {post.contents}
           </div>
-
-          <div className={styles.footer}>
-            <button 
-              className={styles.backBtn} 
-              onClick={() => navigate('/board')}
-            >
-              목록으로
-            </button>
-            <button 
-              className={styles.editBtn}
-              onClick={() => {setEditState("edit"); setEditMsg({title: post.title, contents: post.contents})}}
-            >
-              수정하기
-            </button>
-            <button 
-              className={styles.deleteBtn}
-              onClick={handleDelete}
-            >
-              삭제하기
-            </button>
-          </div>
+          {
+            post.writer == "loginId" ?
+            <>
+              <div className={styles.footer}>
+                <button 
+                  className={styles.backBtn} 
+                  onClick={() => navigate('/board')}
+                >
+                  목록으로
+                </button>
+                <button 
+                  className={styles.editBtn}
+                  onClick={() => {setEditState("edit"); setEditMsg({title: post.title, contents: post.contents})}}
+                >
+                  수정하기
+                </button>
+                <button 
+                  className={styles.deleteBtn}
+                  onClick={handleDelete}
+                >
+                  삭제하기
+                </button>
+              </div>
+            </>
+            :
+            <div className={styles.footer}>
+              <button 
+                className={styles.backBtn} 
+                onClick={() => navigate('/board')}
+              >
+                목록으로
+              </button>
+            </div>
+          }
         </>
       }
       
