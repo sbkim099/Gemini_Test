@@ -53,6 +53,7 @@ const BoardWrite = () => {
             id="title" 
             placeholder="제목을 입력하세요"
             name="title"
+            maxLength={100}
             onChange={handleChange}
           />
         </div>
@@ -64,6 +65,7 @@ const BoardWrite = () => {
             placeholder="내용을 입력하세요" 
             className={styles.textarea}
             name="contents"
+            maxLength={1000}
             onChange={handleChange}
           />
         </div>
