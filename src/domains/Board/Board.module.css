@@ -12,10 +12,30 @@
   margin-bottom: 2rem;
 }
 
+.btnGroup {
+  display: flex;
+  gap: 5px;
+}
+
 .title {
   font-size: 1.8rem;
   font-weight: 700;
   color: #1a1a1a;
+}
+
+.backBtn {
+  padding: 0.6rem 1.2rem;
+  background-color: #64748b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.backBtn:hover {
+  background-color: #475569;
 }
 
 .writeBtn {

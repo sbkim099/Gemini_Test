@@ -3,10 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import styles from './BoardDetail.module.css';
 import { deletePost, getPostDetail, updatePost } from '../../api/boardApi';
 import Reply from './Reply';
+import useAuthStore from '../../store/authStore';
 
 const BoardDetail = () => {
   const { seq } = useParams();
   const navigate = useNavigate();
+  const loginId = useAuthStore(state => state.loginId);
 
   const [post, setPost] = useState({
     title: "",
@@ -111,7 +113,7 @@ const BoardDetail = () => {
             {post.contents}
           </div>
           {
-            post.writer == "loginId" ?
+            post.writer == loginId ?
             <>
               <div className={styles.footer}>
                 <button 

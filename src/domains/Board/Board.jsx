@@ -30,12 +30,20 @@ const Board = () => {
     <div className={styles.container}>
       <header className={styles.header}>
         <h1 className={styles.title}>게시판</h1>
-        <button 
-          className={styles.writeBtn}
-          onClick={() => navigate('/board/write')}
-        >
-          글쓰기
-        </button>
+        <div className={styles.btnGroup}>
+          <button 
+            className={styles.backBtn}
+            onClick={() => navigate('/')}
+          >
+            뒤로가기
+          </button>
+          <button 
+            className={styles.writeBtn}
+            onClick={() => navigate('/board/write')}
+          >
+            글쓰기
+          </button>
+        </div>
       </header>
 
       <table className={styles.boardList}>

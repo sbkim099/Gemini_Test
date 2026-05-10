@@ -2,20 +2,20 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './BoardWrite.module.css';
 import { addPost } from '../../api/boardApi';
+import useAuthStore from '../../store/authStore';
 
 const BoardWrite = () => {
   const navigate = useNavigate();
   
   const [contents, setContents] = useState({title: "", contents:""});
   
-  // 가상의 로그인 사용자 정보 (나중에 실제 데이터로 대체)
-  const author = "현재로그인사용자";
-
+  const loginId = useAuthStore(state => state.loginId);
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setContents((prev) => ({
       ...prev,
-      writer: "loginId",
+      writer: loginId,
       [name]: value
     }));
   };
@@ -40,7 +40,7 @@ const BoardWrite = () => {
           <input 
             type="text" 
             id="author" 
-            value={author} 
+            value={loginId} 
             readOnly 
             className={styles.readOnlyInput}
           />
