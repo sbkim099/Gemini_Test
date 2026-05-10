@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 // Members
 import Login from './domains/Members/Login';
@@ -13,9 +13,16 @@ import BoardDetail from './domains/Board/BoardDetail';
 
 // Loading
 import Loading from './domains/Loading/Loading';
+import useLoadingStore from './store/loadingStore';
+import Reply from './domains/Board/Reply';
 
 function App() {
+
+  const loading = useLoadingStore(state => state.loading);
+
   return (
+    <>
+      {loading && <Loading />}
       <Routes>
         {/* Members Routes */}
         <Route path="/" element={<Login />} />
@@ -26,11 +33,9 @@ function App() {
         <Route path="/board" element={<Board />} />
         <Route path="/board/write" element={<BoardWrite />} />
         <Route path="/board/:seq" element={<BoardDetail />} />
-        
-        {/* Loading / Error Fallback */}
-        <Route path="/loading" element={<Loading />} />
-        
+        {/* <Route path='/board/reply' element={<Reply />} /> */}
       </Routes>
+    </>
   );
 }
 
