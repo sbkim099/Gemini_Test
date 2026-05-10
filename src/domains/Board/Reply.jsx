@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Reply.module.css';
 import { deleteReply, getReplyByParentSeq, postReply, putReply } from '../../api/replyApi';
-import { nativeSelectClasses } from '@mui/material';
+import useAuthStore from '../../store/authStore';
 
 const Reply = ({ seq }) => {
   const [reply, setReply] = useState([{
@@ -13,13 +13,13 @@ const Reply = ({ seq }) => {
   const [comment, setComment] = useState("");
   const [editTarget, setEditTarget] = useState(null);
   const [editContents, setEditContents] = useState("");
-
+  const loginId = useAuthStore(state => state.loginId);
 
   useEffect(() => {
     getReplyByParentSeq(seq).then(resp => {
       setReply(resp.data);
     })
-  }, []);
+  }, [seq]);
 
 
   const handleAddReply = () => {
@@ -30,7 +30,7 @@ const Reply = ({ seq }) => {
 
     const newReply = {
       parent_seq: seq,
-      writer: "김수빈",
+      writer: loginId,
       contents: comment
     }
 
@@ -47,6 +47,7 @@ const Reply = ({ seq }) => {
       getReplyByParentSeq(seq).then(resp => {
         setReply(resp.data);
       })
+      alert("수정이 완료되었습니다.")
       setEditTarget(null);
     })
   }
@@ -98,19 +99,22 @@ const Reply = ({ seq }) => {
               <div className={styles.date}>{reply.write_date.substring(0, 10)}</div>
 
               {
-                editTarget === reply.seq ?
+                loginId === reply.writer && (
+                  editTarget === reply.seq ?
 
-                  <div className={styles.buttonGroup}>
-                    <button className={styles.editBtn} onClick={handleEdit}>저장</button>
-                    <button className={styles.deleteBtn} onClick={() => { setEditTarget(null) }}>취소</button>
-                  </div>
-                  :
-                  <div className={styles.buttonGroup}>
-                    <button className={styles.editBtn} onClick={() => {
-                      setEditTarget(reply.seq); setEditContents(reply.contents);
-                    }}>수정</button>
-                    <button className={styles.deleteBtn} onClick={() => handleDelete(reply.seq)}>삭제</button>
-                  </div>
+                    <div className={styles.buttonGroup}>
+                      <button className={styles.editBtn} onClick={handleEdit}>저장</button>
+                      <button className={styles.deleteBtn} onClick={() => { setEditTarget(null) }}>취소</button>
+                    </div>
+                    :
+
+                    <div className={styles.buttonGroup}>
+                      <button className={styles.editBtn} onClick={() => {
+                        setEditTarget(reply.seq); setEditContents(reply.contents);
+                      }}>수정</button>
+                      <button className={styles.deleteBtn} onClick={() => handleDelete(reply.seq)}>삭제</button>
+                    </div>
+                )
               }
             </div>
           </div>
