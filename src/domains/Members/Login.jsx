@@ -53,6 +53,7 @@ const Login = () => {
           <p><strong>{loginId}</strong>님, 반갑습니다.</p>
           <div className={styles.buttonGroup}>
             <button onClick={() => navigate('/mypage')} className={styles.mypageButton}>마이페이지</button>
+            <button onClick={() => navigate('/board')}  className={styles.toBoardButton}>게시판</button>
             <button onClick={handleLogout} className={styles.logoutButton}>로그아웃</button>
             <button onClick={handleDelete} className={styles.deleteButton}>회원탈퇴</button>
           </div>
