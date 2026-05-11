@@ -20,9 +20,7 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Login attempt with:', user);
     isLogin(user).then(resp => {
-      console.log(resp.data);
       login(resp.data);
     }).catch(err => {
       alert("로그인 실패: " + (err.response?.data || "아이디 또는 비밀번호를 확인하세요."));

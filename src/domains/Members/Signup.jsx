@@ -52,7 +52,6 @@ const Signup = () => {
     const handlePostcode=()=>{
     new window.kakao.Postcode({
         oncomplete: function(data) {
-            console.log(data.zonecode, data.roadAddress);
             setFormData(prev=>({...prev,zipcode:data.zonecode,address1:data.roadAddress}));
         }
     }).open();
@@ -65,7 +64,6 @@ const Signup = () => {
     }
     
     isIdExist(formData.id).then(resp => {
-        console.log(resp.data);
         if (resp.data == 1) {
           alert("이미 존재하는 ID입니다.");
           setIsIdChecked(false);
@@ -75,7 +73,6 @@ const Signup = () => {
         }
       })
       .catch(err => {
-        console.error("error", err);
         alert("중복 체크 중 오류가 발생했습니다.");
         setIsIdChecked(false);
       });
@@ -96,7 +93,6 @@ const Signup = () => {
         alert("회원가입이 완료되었습니다.");
         navigate("/"); // 가입 성공 시 로그인(메인) 페이지로 이동
     }).catch(err => {
-        console.error("Signup error:", err);
     });
   };
 
