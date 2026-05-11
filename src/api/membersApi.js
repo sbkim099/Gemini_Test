@@ -6,3 +6,5 @@ export const isIdExist = (id) => maxios.get(`/members/idExist/${id}`);
 export const insertForm = (formData) => maxios.post("/members",formData);
 export const isLogin = (user) => maxios.post("/auth/login",user);
 export const deleteMember = (id) => maxios.delete(`/members/${id}`);
+export const getProfile = (id) => maxios.get(`/members/${id}`);
+export const upProfile = (id, upData) => maxios.put("/members/"+id,upData);
